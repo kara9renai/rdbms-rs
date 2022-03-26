@@ -1,6 +1,7 @@
 use std::cell::{Cell, RefCell};
 use std::io;
 use std::rc::Rc;
+use std::ops::{Index, IndexMut};
 
 use crate::disk::{DiskManager, PageId, PAGE_SIZE};
 
@@ -84,7 +85,22 @@ impl BufferPool {
         };
         Some(victim_id)
     }
+
     fn increment_id(&self, buffer_id: BufferId) -> BufferId {
         BufferId((buffer_id.0 + 1) % self.size())
+    }
+}
+
+impl Index<BufferId> for BufferPool {
+    type Output = Frame;
+    
+    fn index(&self, index: BufferId) -> &Self::Output {
+        &self.buffers[index.0]
+    }
+}
+
+impl IndexMut<BufferId> for BufferPool {
+    fn index_mut(&mut self, index: BufferId) -> &mut Self::Output {
+        &mut self.buffers[index.0]
     }
 }
