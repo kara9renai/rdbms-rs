@@ -1,3 +1,4 @@
 # rdbms-rs
 ## Arch
-![]("./arch.jpg")
+
+![](./arch.jpg)
