@@ -11,10 +11,10 @@ pub const PAGE_SIZE: usize = 4096;
 #[repr(C)]
 pub struct PageId(pub u64);
 impl PageId {
-    pub const INVALID_PAGEID_ID: PageId = PageId(u64::MAX);
+    pub const INVALID_PAGE_ID: PageId = PageId(u64::MAX);
 
     pub fn valid(self) -> Option<PageId> {
-        if self == Self::INVALID_PAGEID_ID {
+        if self == Self::INVALID_PAGE_ID {
             None
         } else {
             Some(self)
@@ -28,7 +28,7 @@ impl PageId {
 
 impl Default for PageId {
     fn default() -> Self {
-        Self::INVALID_PAGEID_ID
+        Self::INVALID_PAGE_ID
     }
 }
 
