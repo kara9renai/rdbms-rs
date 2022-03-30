@@ -4,3 +4,4 @@ pub mod buffer;
 mod slotted;
 pub mod btree;
 mod memcmpable;
+pub mod tuple;
