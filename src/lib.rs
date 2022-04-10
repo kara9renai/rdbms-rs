@@ -6,3 +6,4 @@ pub mod btree;
 mod memcmpable;
 pub mod tuple;
 pub mod table;
+pub mod query;
