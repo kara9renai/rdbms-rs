@@ -10,7 +10,7 @@ pub type TupleSlice<'a> = &'a [Vec<u8>];
 
 pub enum TupleSearchMode<'a> {
     Start,
-    Key(&'a, [&'a [u8]]),
+    Key(&'a [&'a [u8]]),
 }
 
 impl<'a> TupleSearchMode<'a> {
