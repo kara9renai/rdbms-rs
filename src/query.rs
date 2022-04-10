@@ -73,3 +73,38 @@ impl<'a> Executor for ExecSeqScan<'a> {
         Ok(Some(tuple))
     }
 }
+
+pub struct Filter<'a> {
+    pub inner_plan: &'a dyn PlanNode,
+    pub cond: &'a dyn Fn(TupleSlice) -> bool,
+}
+
+impl<'a> PlanNode for Filter<'a> {
+    fn start(&self, bufmgr: &mut BufferPoolManager) -> Result<BoxExecuter> {
+        let inner_iter = self.inner_plan.start(bufmgr)?;
+        Ok(Box::new(ExecFilter {
+            inner_iter,
+            cond: self.cond,
+        }))
+    }
+}
+
+pub struct ExecFilter<'a> {
+    inner_iter: BoxExecuter<'a>,
+    cond: &'a dyn Fn(TupleSlice) -> bool,
+}
+
+impl<'a> Executor for ExecFilter<'a> {
+    fn next(&mut self, bufmgr: &mut BufferPoolManager) -> Result<Option<Tuple>> {
+        loop {
+            match self.inner_iter.next(bufmgr)? {
+                Some(tuple) => {
+                    if (self.cond)(&tuple) {
+                        return Ok(Some(tuple));
+                    }
+                }
+                None => return Ok(None),
+            }
+        }
+    }
+}
